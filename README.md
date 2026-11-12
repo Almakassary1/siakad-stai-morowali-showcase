@@ -15,7 +15,7 @@ Studi kasus oleh **Almakassary** · Full-stack & UI/UX · 2026
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL_16-4169E1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
-<img src="assets/eksekutif.webp" alt="Command Center — Dashboard Eksekutif" width="100%">
+<img src="eksekutif.webp" alt="Command Center — Dashboard Eksekutif" width="100%">
 
 </div>
 
@@ -42,20 +42,20 @@ Sistem informasi akademik berbasis web untuk Sekolah Tinggi Agama Islam (STAI) M
 
 | Peringatan dini (Early Warning) | Status pembayaran per prodi |
 |---|---|
-| <img src="assets/ews.webp" alt="Early warning"> | <img src="assets/bayar.webp" alt="Pembayaran"> |
+| <img src="ews.webp" alt="Early warning"> | <img src="bayar.webp" alt="Pembayaran"> |
 
 | KRS builder | Lembar nilai dosen |
 |---|---|
-| <img src="assets/krs.webp" alt="KRS builder"> | <img src="assets/nilai.webp" alt="Lembar nilai"> |
+| <img src="krs.webp" alt="KRS builder"> | <img src="nilai.webp" alt="Lembar nilai"> |
 
 | Deteksi bentrok jadwal | Papan kurikulum |
 |---|---|
-| <img src="assets/konflik.webp" alt="Bentrok jadwal"> | <img src="assets/kurikulum.webp" alt="Kurikulum"> |
+| <img src="konflik.webp" alt="Bentrok jadwal"> | <img src="kurikulum.webp" alt="Kurikulum"> |
 
 <div align="center">
-<img src="assets/m_eks.webp" alt="Mobile — Command Center" width="30%">&nbsp;
-<img src="assets/m_krs.webp" alt="Mobile — KRS" width="30%">&nbsp;
-<img src="assets/m_drawer.webp" alt="Mobile — Navigasi" width="30%">
+<img src="m_eks.webp" alt="Mobile — Command Center" width="30%">&nbsp;
+<img src="m_krs.webp" alt="Mobile — KRS" width="30%">&nbsp;
+<img src="m_drawer.webp" alt="Mobile — Navigasi" width="30%">
 </div>
 
 ## Sorotan teknis
