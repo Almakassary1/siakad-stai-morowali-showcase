@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Studi kasus SIAKAD STAI Morowali oleh Almakassary — sistem informasi akademik Next.js, Prisma, PostgreSQL.">
+<meta name="robots" content="noimageindex">
+<meta property="og:title" content="SIAKAD STAI Morowali — Almakassary">
+<meta property="og:image" content="assets/eksekutif.webp">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}</style>
+<title>SIAKAD STAI Morowali — Almakassary</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one dark "control room" column, product shots framed like monitors; role tabs drive the gallery. */
+:root{
+  --ink:#050a14; --panel:#0b1424; --panel-2:#0f1b30; --line:#1b2a44;
+  --fg:#e6eef8; --muted:#8fa3bd; --cyan:#22d3ee; --cyan-soft:rgba(34,211,238,.12);
+  --amber:#fbbf24; --red:#f87171; --green:#34d399;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--fg);font:16px/1.6 var(--f-body);
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
+body:not(.en) [lang=en], body.en [lang=id]{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(5,10,20,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.sig{font:500 13px var(--f-mono);letter-spacing:.08em;color:var(--muted)}
+.sig b{color:var(--fg);font-weight:500}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.lang button{all:unset;cursor:pointer;font:500 12px var(--f-mono);letter-spacing:.08em;padding:5px 12px;border-radius:999px;color:var(--muted)}
+.lang button[aria-pressed=true]{background:var(--cyan);color:#04202a}
+
+/* hero */
+.hero{padding-block:72px 40px;position:relative}
+.hero::after{content:"";position:absolute;inset:-120px 0 auto;height:520px;z-index:-1;
+  background:radial-gradient(600px 300px at 70% 20%,rgba(34,211,238,.16),transparent 70%),
+             radial-gradient(500px 260px at 10% 0%,rgba(56,189,248,.08),transparent 70%)}
+.eyebrow{font:500 12px var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);display:flex;gap:10px;align-items:center}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--cyan)}
+h1{font:700 clamp(40px,7vw,84px)/1 var(--f-display);letter-spacing:-.03em;margin:18px 0 0;text-wrap:balance}
+h1 span{color:var(--cyan)}
+.lede{max-width:62ch;color:var(--muted);font-size:clamp(16px,1.6vw,19px);margin:22px 0 0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:26px;font:13px var(--f-mono);color:var(--muted)}
+.meta b{color:var(--fg);font-weight:500}
+
+/* monitor frame */
+.shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--panel);
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(34,211,238,.05)}
+.shot .chrome{display:flex;gap:6px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line);background:var(--panel-2)}
+.shot .chrome i{width:9px;height:9px;border-radius:50%;background:#26354f}
+.shot .chrome span{margin-left:10px;font:11px var(--f-mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pic{display:block;width:100%;background-size:cover;background-position:top center;position:relative;cursor:zoom-in}
+.pic::after{content:"";position:absolute;inset:0} /* shield */
+.hero .shot{margin-top:44px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line);margin-top:56px}
+.stats div{padding:22px 18px;border-left:1px solid var(--line)}
+.stats div:first-child{border-left:0}
+.stats b{display:block;font:700 clamp(28px,4vw,40px)/1 var(--f-display);font-variant-numeric:tabular-nums}
+.stats span{font-size:13px;color:var(--muted)}
+
+section{padding-block:72px}
+h2{font:700 clamp(28px,4vw,44px)/1.1 var(--f-display);letter-spacing:-.02em;margin:14px 0 0;text-wrap:balance}
+.sub{color:var(--muted);max-width:62ch;margin:14px 0 0}
+
+/* phases */
+.phases{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(5,1fr);gap:0;counter-reset:f}
+.phases li{padding:20px 18px 0;border-top:2px solid var(--line);position:relative}
+.phases li::before{counter-increment:f;content:"Fase " counter(f);font:500 12px var(--f-mono);letter-spacing:.1em;color:var(--cyan);text-transform:uppercase}
+.phases li::after{content:"";position:absolute;top:-6px;left:18px;width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 4px var(--ink)}
+.phases h3{font:600 17px/1.3 var(--f-display);margin:8px 0 6px}
+.phases p{margin:0;font-size:14px;color:var(--muted)}
+
+/* gallery */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:32px}
+.tabs button{all:unset;cursor:pointer;padding:9px 16px;border-radius:999px;border:1px solid var(--line);font-size:14px;color:var(--muted)}
+.tabs button[aria-selected=true]{border-color:var(--cyan);background:var(--cyan-soft);color:var(--fg)}
+.panel{margin-top:28px;display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:start}
+.panel .list{display:flex;flex-direction:column;gap:6px;min-width:0}
+.feat{all:unset;cursor:pointer;display:block;padding:14px 16px;border-radius:10px;border:1px solid transparent}
+.feat h4{margin:0;font:600 16px var(--f-display)}
+.feat p{margin:4px 0 0;font-size:14px;color:var(--muted)}
+.feat[aria-current=true]{background:var(--panel);border-color:var(--line)}
+.feat[aria-current=true] h4{color:var(--cyan)}
+
+/* engineering */
+.eng{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;min-width:0}
+.card h3{font:600 19px var(--f-display);margin:0}
+.card p,.card li{color:var(--muted);font-size:15px}
+.card ul{padding-left:18px;margin:12px 0 0}
+.card li{margin:4px 0}
+.tag{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.rules{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+.rules td{padding:10px 0;border-top:1px solid var(--line);vertical-align:top;color:var(--muted)}
+.rules td:first-child{width:96px}
+.pill{display:inline-block;font:500 11px var(--f-mono);letter-spacing:.06em;padding:3px 8px;border-radius:999px}
+.k{background:rgba(248,113,113,.14);color:var(--red)}
+.t{background:rgba(251,191,36,.14);color:var(--amber)}
+.w{background:var(--cyan-soft);color:var(--cyan)}
+code{font:13px var(--f-mono);color:var(--fg);background:var(--panel-2);padding:1px 6px;border-radius:5px}
+
+/* mobile */
+.phones{display:grid;grid-template-columns:repeat(3,minmax(0,260px));gap:28px;justify-content:center;margin-top:40px}
+.phone{border-radius:28px;padding:8px;background:var(--panel-2);border:1px solid var(--line)}
+.phone .pic{border-radius:22px}
+.phone figcaption{text-align:center;font-size:13px;color:var(--muted);padding:10px 0 4px}
+figure{margin:0}
+
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.stack span{font:13px var(--f-mono);padding:7px 12px;border:1px solid var(--line);border-radius:8px;color:var(--fg)}
+
+footer{border-top:1px solid var(--line);padding-block:40px 56px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+footer b{color:var(--fg);font-family:var(--f-display);font-size:18px}
+
+/* lightbox */
+.lb[hidden]{display:none!important}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(3,6,12,.94);display:flex;align-items:center;justify-content:center;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lb .pic{width:min(1400px,100%);max-height:100%;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:zoom-out}
+.lb button{all:unset;position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));cursor:pointer;font:500 13px var(--f-mono);color:var(--fg);border:1px solid var(--line);padding:6px 12px;border-radius:8px}
+.notice{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--panel-2);border:1px solid var(--line);color:var(--fg);font-size:13px;padding:10px 16px;border-radius:10px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.notice.on{opacity:1}
+
+@media (max-width:860px){
+  .panel{grid-template-columns:1fr}
+  .eng{grid-template-columns:1fr}
+  .phases{grid-template-columns:1fr;gap:0}
+  .phases li{border-top:0;border-left:2px solid var(--line);padding:0 0 22px 22px}
+  .phases li::after{top:4px;left:-6px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stats div:nth-child(3){border-left:0}
+  .stats div:nth-child(n+3){border-top:1px solid var(--line)}
+  .phones{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .phone{border-radius:18px;padding:5px}.phone .pic{border-radius:14px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .hero .shot{animation:rise .9s cubic-bezier(.2,.7,.2,1) both .1s}
+  @keyframes rise{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+}
+@media print{body{display:none}}
+</style>
+
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <div class="sig"><b>Almakassary</b> · <span lang="id">Portofolio</span><span lang="en">Portfolio</span></div>
+  <div class="lang" role="group" aria-label="Bahasa / Language">
+    <button id="l-id" aria-pressed="true">ID</button><button id="l-en" aria-pressed="false">EN</button>
+  </div>
+</div></header>
+
+<main>
+<div class="wrap hero">
+  <div class="eyebrow"><span lang="id">Studi kasus · Sistem informasi akademik</span><span lang="en">Case study · Academic information system</span></div>
+  <h1>SIAKAD <span>STAI Morowali</span></h1>
+  <p class="lede">
+    <span lang="id">Sistem informasi akademik berbasis web untuk Sekolah Tinggi Agama Islam Morowali: dari KRS mahasiswa, penilaian dosen, hingga Command Center pimpinan dengan peringatan dini akademik. Struktur datanya mengikuti kode referensi PDDikti / Neo Feeder sejak awal.</span>
+    <span lang="en">A web-based academic information system for STAI Morowali, an Islamic college in Central Sulawesi: student course registration, lecturer grading, and an executive Command Center with an academic early-warning system. The data model follows PDDikti / Neo Feeder reference codes from day one.</span>
+  </p>
+  <div class="meta">
+    <span><span lang="id">Peran</span><span lang="en">Role</span>: <b>Full-stack · UI/UX</b></span>
+    <span><span lang="id">Tahun</span><span lang="en">Year</span>: <b>2026</b></span>
+    <span><span lang="id">Klien</span><span lang="en">Client</span>: <b>STAI Morowali</b></span>
+  </div>
+  <div class="shot"><div class="chrome"><i></i><i></i><i></i><span>siakad.staimorowali.ac.id/eksekutif</span></div>
+    <div class="pic" data-img="eksekutif" role="img" aria-label="Dashboard Eksekutif"></div></div>
+
+  <div class="stats">
+    <div><b>4</b><span lang="id">Program studi: PAI, HKI, PGMI, PIAUD</span><span lang="en">Study programs: PAI, HKI, PGMI, PIAUD</span></div>
+    <div><b>7</b><span lang="id">Peran pengguna dengan hak akses berbeda</span><span lang="en">User roles with scoped permissions</span></div>
+    <div><b>21</b><span lang="id">Halaman aplikasi</span><span lang="en">Application screens</span></div>
+    <div><b>151</b><span lang="id">Tes otomatis lulus</span><span lang="en">Automated tests passing</span></div>
+  </div>
+</div>
+
+<section class="wrap" id="proses">
+  <div class="eyebrow"><span lang="id">Proses</span><span lang="en">Process</span></div>
+  <h2><span lang="id">Dibangun dalam lima fase</span><span lang="en">Built in five phases</span></h2>
+  <ol class="phases">
+    <li><h3><span lang="id">Fondasi data</span><span lang="en">Data foundation</span></h3><p><span lang="id">Skema Prisma/PostgreSQL berkode Feeder, aturan SKS, prasyarat, skala nilai.</span><span lang="en">Prisma/PostgreSQL schema with Feeder codes, credit-load rules, prerequisites, grading scale.</span></p></li>
+    <li><h3>Design system</h3><p><span lang="id">Tema midnight glassmorphism, sidebar per peran, palet perintah, tabel data.</span><span lang="en">Midnight glassmorphism theme, role-aware sidebar, command palette, data tables.</span></p></li>
+    <li><h3><span lang="id">Panel admin</span><span lang="en">Admin panel</span></h3><p><span lang="id">Data master, kurikulum, plotting jadwal dengan deteksi bentrok, moderasi KRS, validasi keuangan.</span><span lang="en">Master data, curriculum, scheduling with clash detection, KRS moderation, payment validation.</span></p></li>
+    <li><h3><span lang="id">Portal mahasiswa & dosen</span><span lang="en">Student & lecturer portals</span></h3><p><span lang="id">KRS builder, KHS & transkrip, bimbingan akademik, lembar nilai.</span><span lang="en">KRS builder, transcripts, academic advising, grade sheets.</span></p></li>
+    <li><h3><span lang="id">Eksekutif & rilis</span><span lang="en">Executive & release</span></h3><p><span lang="id">Command Center, peringatan dini, login aman, Docker siap produksi.</span><span lang="en">Command Center, early warning, secure login, production Docker.</span></p></li>
+  </ol>
+</section>
+
+<section class="wrap" id="fitur">
+  <div class="eyebrow"><span lang="id">Fitur</span><span lang="en">Features</span></div>
+  <h2><span lang="id">Satu sistem, empat sudut pandang</span><span lang="en">One system, four points of view</span></h2>
+  <p class="sub"><span lang="id">Setiap peran melihat menu dan data yang berbeda. Pilih peran, lalu klik fitur untuk melihat layarnya.</span><span lang="en">Each role sees its own menu and data. Pick a role, then a feature to see its screen.</span></p>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="panel">
+    <div class="shot"><div class="chrome"><i></i><i></i><i></i><span id="url"></span></div><div class="pic" id="stage" role="img"></div></div>
+    <div class="list" id="list"></div>
+  </div>
+</section>
+
+<section class="wrap" id="rekayasa">
+  <div class="eyebrow"><span lang="id">Di balik layar</span><span lang="en">Under the hood</span></div>
+  <h2><span lang="id">Keputusan rekayasa yang penting</span><span lang="en">Engineering decisions that matter</span></h2>
+  <div class="eng">
+    <div class="card">
+      <div class="tag">Early Warning System</div>
+      <h3><span lang="id">Aturan peringatan dini yang bisa diaudit</span><span lang="en">Auditable early-warning rules</span></h3>
+      <table class="rules"><tbody>
+        <tr><td><span class="pill k">KRITIS</span></td><td><span lang="id">IPK &lt; 2,00, atau IPS &lt; 2,00 dua semester berturut-turut</span><span lang="en">GPA &lt; 2.00, or term GPA &lt; 2.00 two terms in a row</span></td></tr>
+        <tr><td><span class="pill t">TINGGI</span></td><td><span lang="id">IPS &lt; 2,00 dan turun ≥ 0,75 dari semester sebelumnya</span><span lang="en">Term GPA &lt; 2.00 with a drop of 0.75 or more</span></td></tr>
+        <tr><td><span class="pill w">WASPADA</span></td><td><span lang="id">IPS &lt; 2,00</span><span lang="en">Term GPA &lt; 2.00</span></td></tr>
+      </tbody></table>
+      <p><span lang="id">Satu klik mengirim notifikasi ke dosen PA masing-masing, dan tindakannya tercatat di audit log.</span><span lang="en">One click notifies each student's academic advisor, and the action is written to the audit log.</span></p>
+    </div>
+    <div class="card">
+      <div class="tag">PDDikti · Neo Feeder</div>
+      <h3><span lang="id">Siap pelaporan nasional</span><span lang="en">Ready for national reporting</span></h3>
+      <ul>
+        <li><span lang="id">Status mahasiswa disimpan dengan kode resmi Feeder (A, C, D, K, L, N, M)</span><span lang="en">Student status stored as official Feeder codes (A, C, D, K, L, N, M)</span></li>
+        <li><span lang="id">Kolom <code>feeder_id</code> pada entitas inti untuk sinkronisasi</span><span lang="en"><code>feeder_id</code> columns on core entities for sync</span></li>
+        <li><span lang="id">Rasio dosen : mahasiswa diukur terhadap acuan Ditjen Dikti (1:30 ideal, 1:45 batas)</span><span lang="en">Lecturer-to-student ratio measured against Ditjen Dikti guidance (1:30 ideal, 1:45 limit)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag"><span lang="id">Keamanan</span><span lang="en">Security</span></div>
+      <h3><span lang="id">Login yang dibuat dengan serius</span><span lang="en">Authentication done properly</span></h3>
+      <ul>
+        <li><span lang="id">Password di-hash dengan scrypt, perbandingan waktu-konstan</span><span lang="en">scrypt password hashing, constant-time comparison</span></li>
+        <li><span lang="id">Sesi bertanda tangan HMAC, httpOnly, otomatis gugur saat password diganti</span><span lang="en">HMAC-signed httpOnly session, revoked when the password changes</span></li>
+        <li><span lang="id">Pembatasan percobaan login dan audit setiap login gagal</span><span lang="en">Login rate limiting and an audit entry for every failed attempt</span></li>
+        <li><span lang="id">Hak akses per peran dan per program studi</span><span lang="en">Permissions scoped by role and by study program</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tag">Deployment</div>
+      <h3><span lang="id">Siap dipasang di server kampus</span><span lang="en">Ready for the campus server</span></h3>
+      <ul>
+        <li><span lang="id">Docker multi-stage, Next.js standalone, berjalan non-root dan read-only</span><span lang="en">Multi-stage Docker, Next.js standalone, runs non-root and read-only</span></li>
+        <li><span lang="id">PostgreSQL 16 di jaringan internal, migrasi otomatis sebelum aplikasi naik</span><span lang="en">PostgreSQL 16 on an internal network, migrations run before the app starts</span></li>
+        <li><span lang="id">HTTPS otomatis, health check, backup harian dengan retensi 14 hari</span><span lang="en">Automatic HTTPS, health checks, daily backups with 14-day retention</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="mobile">
+  <div class="eyebrow"><span lang="id">Responsif</span><span lang="en">Responsive</span></div>
+  <h2><span lang="id">Nyaman dibuka dari ponsel</span><span lang="en">Works on a phone</span></h2>
+  <p class="sub"><span lang="id">Sebagian besar mahasiswa mengisi KRS dari ponsel, jadi setiap layar dirancang ulang untuk lebar 390 px.</span><span lang="en">Most students fill in their course plan on a phone, so every screen was laid out again for a 390 px width.</span></p>
+  <div class="phones">
+    <figure class="phone"><div class="pic" data-img="m_eks" role="img" aria-label="Dashboard Eksekutif mobile"></div><figcaption>Command Center</figcaption></figure>
+    <figure class="phone"><div class="pic" data-img="m_krs" role="img" aria-label="KRS mobile"></div><figcaption><span lang="id">Kartu Rencana Studi</span><span lang="en">Course plan</span></figcaption></figure>
+    <figure class="phone"><div class="pic" data-img="m_drawer" role="img" aria-label="Menu mobile"></div><figcaption><span lang="id">Menu navigasi</span><span lang="en">Navigation</span></figcaption></figure>
+  </div>
+  <div class="stack">
+    <span>Next.js 16</span><span>TypeScript</span><span>Tailwind CSS</span><span>Framer Motion</span><span>Prisma 7</span><span>PostgreSQL 16</span><span>Lucide</span><span>Vitest</span><span>Playwright</span><span>Docker</span><span>Caddy</span>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <div><b>Almakassary</b><br><span lang="id">Perancang & pengembang SIAKAD STAI Morowali</span><span lang="en">Designer & developer of SIAKAD STAI Morowali</span></div>
+  <div style="max-width:52ch"><span lang="id">© 2026 Almakassary. Seluruh tangkapan layar, desain, dan kode sumber dilindungi hak cipta. Halaman ini hanya untuk dilihat; dilarang menyalin atau menggunakan ulang tanpa izin tertulis. Data pada tangkapan layar adalah data demo.</span><span lang="en">© 2026 Almakassary. All screenshots, design and source code are protected by copyright. This page is for viewing only; copying or reuse without written permission is not allowed. Screenshots show demo data.</span></div>
+</div></footer>
+
+<div class="lb" id="lb" hidden><button id="lb-x">ESC ✕</button><div class="pic" id="lb-pic"></div></div>
+<div class="notice" id="notice"></div>
+
+<script>
+const IMG = {"eksekutif": {"w": 1600, "h": 1067, "src": "assets/eksekutif.webp"}, "ews": {"w": 1400, "h": 924, "src": "assets/ews.webp"}, "bayar": {"w": 1000, "h": 878, "src": "assets/bayar.webp"}, "khschart": {"w": 1200, "h": 737, "src": "assets/khschart.webp"}, "krs": {"w": 1600, "h": 1067, "src": "assets/krs.webp"}, "konflik": {"w": 1600, "h": 1000, "src": "assets/konflik.webp"}, "jadwal": {"w": 1600, "h": 1000, "src": "assets/jadwal.webp"}, "moderasi": {"w": 1600, "h": 1000, "src": "assets/moderasi.webp"}, "kurikulum": {"w": 1600, "h": 1000, "src": "assets/kurikulum.webp"}, "keuangan": {"w": 1600, "h": 1000, "src": "assets/keuangan.webp"}, "transkrip": {"w": 1600, "h": 1067, "src": "assets/transkrip.webp"}, "nilai": {"w": 1600, "h": 1067, "src": "assets/nilai.webp"}, "bimbingan": {"w": 1600, "h": 1067, "src": "assets/bimbingan.webp"}, "palette": {"w": 1600, "h": 1000, "src": "assets/palette.webp"}, "login": {"w": 1600, "h": 1067, "src": "assets/login.webp"}, "m_eks": {"w": 600, "h": 1022, "src": "assets/m_eks.webp"}, "m_krs": {"w": 600, "h": 1022, "src": "assets/m_krs.webp"}, "m_drawer": {"w": 600, "h": 1022, "src": "assets/m_drawer.webp"}};
+const FEAT = {
+  pimpinan:{id:"Pimpinan",en:"Leadership",items:[
+    ["eksekutif","eksekutif",{id:["Command Center","KPI mahasiswa aktif, rasio dosen, pembayaran, rata-rata IPK, dan tren per semester dalam satu layar."],en:["Command Center","Active students, lecturer ratio, payments, average GPA and term trends on one screen."]}],
+    ["ews","eksekutif#peringatan",{id:["Peringatan dini","Daftar mahasiswa berisiko per tingkat, lengkap dengan jejak IPS dan tombol beri tahu dosen PA."],en:["Early warning","At-risk students by severity, with a term-GPA trail and a notify-advisor action."]}],
+    ["bayar","eksekutif#keuangan",{id:["Status pembayaran","Proporsi lunas, dispensasi, dan belum lunas per prodi, lengkap dengan nominal terkumpul."],en:["Payment status","Paid, waived and outstanding share per program, with amounts collected."]}],
+  ]},
+  admin:{id:"Admin akademik",en:"Academic admin",items:[
+    ["konflik","admin/jadwal",{id:["Deteksi bentrok jadwal","Saat membuka kelas, sistem langsung memeriksa bentrok ruang dan dosen."],en:["Clash detection","Opening a class checks room and lecturer clashes as you type."]}],
+    ["jadwal","admin/jadwal",{id:["Jadwal mingguan","Tampilan kalender per ruang, dosen, atau prodi."],en:["Weekly timetable","Calendar view by room, lecturer or program."]}],
+    ["kurikulum","admin/kurikulum",{id:["Papan kurikulum","Sebaran mata kuliah per semester dengan total SKS dan prasyarat."],en:["Curriculum board","Courses laid out per term with credit totals and prerequisites."]}],
+    ["moderasi","admin/krs",{id:["Moderasi KRS","Pantau status KRS seluruh mahasiswa per prodi."],en:["KRS moderation","Track every student's course-plan status per program."]}],
+    ["keuangan","admin/keuangan",{id:["Validasi keuangan","Her-registrasi dan pembayaran yang menjadi syarat pengisian KRS."],en:["Payment validation","Re-registration and payments that gate course registration."]}],
+  ]},
+  mahasiswa:{id:"Mahasiswa",en:"Students",items:[
+    ["krs","mahasiswa/krs",{id:["KRS builder","Pilih kelas dengan batas SKS dari IPS, cek prasyarat dan bentrok jadwal otomatis."],en:["KRS builder","Pick classes within a GPA-based credit cap, with prerequisite and clash checks."]}],
+    ["khschart","mahasiswa/khs",{id:["Perkembangan IPS & IPK","Grafik interaktif dengan batas SKS semester berikutnya."],en:["GPA progress","Interactive chart with next term's credit cap."]}],
+    ["transkrip","mahasiswa/transkrip",{id:["Transkrip nilai","Siap cetak dengan format resmi kampus."],en:["Transcript","Print-ready in the college's official format."]}],
+  ]},
+  dosen:{id:"Dosen",en:"Lecturers",items:[
+    ["nilai","dosen/nilai",{id:["Lembar nilai","Input komponen nilai dengan konversi huruf otomatis dan sebaran nilai kelas."],en:["Grade sheet","Enter grade components with automatic letter conversion and class distribution."]}],
+    ["bimbingan","dosen/bimbingan",{id:["Bimbingan akademik","Daftar mahasiswa bimbingan dengan status KRS dan keuangan."],en:["Academic advising","Advisees with their course-plan and payment status."]}],
+    ["palette","dashboard",{id:["Palet perintah","Tekan Ctrl K untuk lompat ke menu mana pun."],en:["Command palette","Press Ctrl K to jump to any screen."]}],
+  ]},
+};
+let lang="id", role="pimpinan", cur=0;
+const $=s=>document.querySelector(s);
+function paint(el,key){const m=IMG[key];if(!m)return;el.style.backgroundImage=`url(${m.src})`;el.style.aspectRatio=`${m.w}/${m.h}`;el.dataset.img=key;}
+document.querySelectorAll(".pic[data-img]").forEach(el=>paint(el,el.dataset.img));
+function render(){
+  const tabs=$("#tabs");tabs.innerHTML="";
+  for(const [k,v] of Object.entries(FEAT)){
+    const b=document.createElement("button");b.role="tab";b.id="tab-"+k;b.textContent=v[lang];
+    b.setAttribute("aria-selected",k===role);b.onclick=()=>{role=k;cur=0;render()};tabs.append(b);
+  }
+  const list=$("#list");list.innerHTML="";
+  FEAT[role].items.forEach(([img,path,t],i)=>{
+    const b=document.createElement("button");b.className="feat";b.id=`f-${role}-${i}`;
+    b.setAttribute("aria-current",i===cur);
+    b.innerHTML=`<h4>${t[lang][0]}</h4><p>${t[lang][1]}</p>`;
+    b.onclick=()=>{cur=i;render()};list.append(b);
+  });
+  const [img,path]=FEAT[role].items[cur];
+  paint($("#stage"),img);$("#url").textContent="siakad.staimorowali.ac.id/"+path;
+}
+function setLang(l){lang=l;document.body.classList.toggle("en",l==="en");document.documentElement.lang=l;
+  $("#l-id").setAttribute("aria-pressed",l==="id");$("#l-en").setAttribute("aria-pressed",l==="en");render();
+  try{localStorage.setItem("pf-lang",l)}catch(e){}}
+$("#l-id").onclick=()=>setLang("id");$("#l-en").onclick=()=>setLang("en");
+try{const s=localStorage.getItem("pf-lang");if(s==="en"||s==="id")lang=s}catch(e){}
+setLang(lang);
+
+/* lightbox */
+const lb=$("#lb");
+document.addEventListener("click",e=>{const p=e.target.closest(".pic[data-img]");if(p&&!lb.contains(p)){paint($("#lb-pic"),p.dataset.img);$("#lb-pic").style.aspectRatio="";$("#lb-pic").style.height="100%";lb.hidden=false;}});
+lb.onclick=()=>lb.hidden=true;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")lb.hidden=true;});
+
+/* view-only guards */
+let t;function note(){const n=$("#notice");n.textContent=lang==="en"?"View only · © Almakassary":"Hanya untuk dilihat · © Almakassary";n.classList.add("on");clearTimeout(t);t=setTimeout(()=>n.classList.remove("on"),1600);}
+["contextmenu","dragstart","copy","cut","selectstart"].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault();if(ev==="contextmenu"||ev==="copy")note();}));
+document.addEventListener("keydown",e=>{const k=e.key.toLowerCase();
+  if((e.ctrlKey||e.metaKey)&&["s","u","p","c","a"].includes(k)||(e.ctrlKey&&e.shiftKey&&["i","j","c"].includes(k))||k==="f12"){e.preventDefault();note();}});
+</script>
+
+</body>
+</html>
